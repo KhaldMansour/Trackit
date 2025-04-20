@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # Laravel application container
+  trackit-backend:
+    container_name: trackit-backend
+    build: .
+    volumes:
+      - ./:/var/www/html
+      - vendor:/var/www/html/vendor
+      - ./entrypoint.sh:/entrypoint.sh 
+    ports:
+      - 8000:80
+    depends_on:
+      - mysql_db
+    
+
+  # MySQL database container
+  mysql_db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: trackit
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_ai_ci
+volumes:
+  mysql_data:
+  vendor:
